@@ -140,7 +140,7 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
     setKeyboardHeight(e.endCoordinates.height);
   };
 
-  const _keyboardDidHide = () => {
+  const _keyboardDidHide = (e) => {
     setKeyboardHeight(0);
   };
 
