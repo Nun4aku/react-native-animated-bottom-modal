@@ -194,3 +194,5 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
     </Modal>
   );
 };
+
+export default AnimatedBottomModal;
