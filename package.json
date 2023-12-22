@@ -1,13 +1,17 @@
 {
   "name": "react-native-animated-bottom-modal",
   "version": "1.0.0",
-  "description": "",
+  "description": "Animated bottom modal for React Native",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "React Native",
+    "modal",
+    "animation"
+  ],
+  "author": "Dmitry Kleshnev",
   "license": "ISC",
   "dependencies": {
     "react": "^18.2.0",
