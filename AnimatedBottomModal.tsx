@@ -1,6 +1,6 @@
-import Modal from 'react-native-modal';
-import * as React from 'react';
-import {useRef, useState, useEffect, FC} from 'react';
+import Modal from "react-native-modal";
+import * as React from "react";
+import { useRef, useState, useEffect, FC } from "react";
 import {
   View,
   Animated,
@@ -10,8 +10,8 @@ import {
   PanResponder,
   Keyboard,
   EmitterSubscription,
-} from 'react-native';
-import XIcon from './XIcon';
+} from "react-native";
+import XIcon from "./XIcon";
 
 interface AnimatedBottomModalProps {
   isVisible: boolean;
@@ -26,28 +26,28 @@ interface AnimatedBottomModalProps {
 const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
   isVisible,
   onClose,
-  backgroundColorModal = 'white',
-  backgroundColorCloseIcon = 'white',
+  backgroundColorModal = "white",
+  backgroundColorCloseIcon = "white",
   closeIcon = true,
   lineAbove = true,
   children,
 }) => {
   const styles = StyleSheet.create({
     closeIcon: {
-      alignSelf: 'flex-end',
+      alignSelf: "flex-end",
       backgroundColor: backgroundColorCloseIcon,
       borderRadius: 12,
       height: 24,
       width: 24,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
     },
     line: {
       height: 5,
       width: 80,
       borderRadius: 5,
-      backgroundColor: backgroundColorModal ?? 'white',
-      alignSelf: 'center',
+      backgroundColor: backgroundColorModal ?? "white",
+      alignSelf: "center",
       marginBottom: 3,
     },
     contentWrapper: {
@@ -60,24 +60,24 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
 
   const [heightContent, setHeightContent] = useState(0);
   const translateY = useRef(new Animated.Value(0)).current;
-  const HEIGH = Dimensions.get('window').height;
+  const HEIGH = Dimensions.get("window").height;
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const keyboardDidShowListener = useRef<EmitterSubscription | undefined>(
-    undefined,
+    undefined
   );
   const keyboardDidHideListener = useRef<EmitterSubscription | undefined>(
-    undefined,
+    undefined
   );
 
   useEffect(() => {
     keyboardDidShowListener.current = Keyboard.addListener(
-      'keyboardDidShow',
-      _keyboardDidShow,
+      "keyboardDidShow",
+      _keyboardDidShow
     );
     keyboardDidHideListener.current = Keyboard.addListener(
-      'keyboardDidHide',
-      _keyboardDidHide,
+      "keyboardDidHide",
+      _keyboardDidHide
     );
 
     return () => {
@@ -101,13 +101,13 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
   const animateHeight = (
     newHeight: number,
     callback?: () => void,
-    duration = 300,
+    duration = 300
   ) => {
     Animated.timing(translateY, {
       toValue: newHeight,
       duration: duration,
       useNativeDriver: true,
-    }).start(({finished}) => {
+    }).start(({ finished }) => {
       finished && callback;
     });
   };
@@ -115,7 +115,7 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (e, gestureState) => {
-      const {dy} = gestureState;
+      const { dy } = gestureState;
       if (dy < -20) {
         animateHeight(-heightContent - 20, () => {}, 0);
       } else {
@@ -136,7 +136,7 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
     },
   });
 
-  const _keyboardDidShow = e => {
+  const _keyboardDidShow = (e) => {
     setKeyboardHeight(e.endCoordinates.height);
   };
 
@@ -144,8 +144,8 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
     setKeyboardHeight(0);
   };
 
-  const onBlockLayout = event => {
-    const {height} = event.nativeEvent.layout;
+  const onBlockLayout = (event) => {
+    const { height } = event.nativeEvent.layout;
     setHeightContent(height + 70);
   };
 
@@ -161,15 +161,15 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
       backdropTransitionInTiming={300} // Скорость появления фона
       backdropTransitionOutTiming={300} // Скорость исчезновения фона
       onBackdropPress={closeModal}
-      backdropColor={'rgba(0, 0, 0, 0.3)'}
-      style={{justifyContent: 'flex-end', margin: 0}}
+      backdropColor={"rgba(0, 0, 0, 0.3)"}
+      style={{ justifyContent: "flex-end", margin: 0 }}
     >
       <Animated.View
         style={{
-          width: '100%',
-          position: 'absolute',
+          width: "100%",
+          position: "absolute",
           top: HEIGH,
-          transform: [{translateY: translateY}],
+          transform: [{ translateY: translateY }],
         }}
         {...panResponder.panHandlers}
       >
@@ -177,22 +177,20 @@ const AnimatedBottomModal: FC<AnimatedBottomModalProps> = ({
         <View
           style={[
             styles.contentWrapper,
-            {backgroundColor: backgroundColorModal ?? 'white'},
+            { backgroundColor: backgroundColorModal ?? "white" },
           ]}
         >
           <View onLayout={onBlockLayout}>
             {closeIcon && (
               <TouchableOpacity onPress={closeModal} style={styles.closeIcon}>
-                <XIcon size={12} color={'black'} />
+                <XIcon size={12} color={"black"} />
               </TouchableOpacity>
             )}
             <View>{children}</View>
-            <View style={{height: keyboardHeight}}></View>
+            <View style={{ height: keyboardHeight }}></View>
           </View>
         </View>
       </Animated.View>
     </Modal>
   );
 };
-
-export default AnimatedBottomModal;
